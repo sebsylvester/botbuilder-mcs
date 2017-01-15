@@ -1,0 +1,48 @@
+{
+  "name": "celebrity-recognition-bot",
+  "version": "1.0.0",
+  "description": "A simple bot that can recognize celebrities from uploaded images and checks if there's a verified twitter and instagram account.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sebsylvester/celebrity-recognition-bot"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "pretest": "tsc test/*.ts --module commonjs --sourcemap",
+    "pretest:watch": "tsc test/*.ts --module commonjs --sourcemap --watch",
+    "test": "nyc --reporter=lcov mocha",
+    "posttest": "nyc report",
+    "quicktest": "nyc --reporter=lcov mocha && nyc report"
+  },
+  "keywords": [
+    "Microsoft Bot Framework",
+    "BotBuilder SDK",
+    "Microsoft Cognitive Services",
+    "Computer Vision"
+  ],
+  "author": "Sebastian Sylvester",
+  "license": "ISC",
+  "dependencies": {
+    "botbuilder": "^3.5.1",
+    "request": "^2.79.0",
+    "restify": "^4.3.0",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.37",
+    "@types/node": "^6.0.52",
+    "@types/request": "0.0.39",
+    "@types/restify": "^2.0.35",
+    "@types/sinon": "^1.16.34",
+    "@types/valid-url": "^1.0.2",
+    "chai": "^3.5.0",
+    "codecov": "^1.0.1",
+    "mocha": "^3.2.0",
+    "nyc": "^10.0.0",
+    "sinon": "^1.17.6",
+    "typescript": "^2.1.4"
+  }
+}
