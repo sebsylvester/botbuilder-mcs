@@ -1,11 +1,11 @@
 {
   "name": "celebrity-recognition-bot",
   "version": "1.0.0",
-  "description": "A simple bot that can recognize celebrities from uploaded images and checks if there's a verified twitter and instagram account.",
-  "main": "index.js",
+  "description": "A simple bot that can recognize celebrities in images.",
+  "main": "lib/app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sebsylvester/celebrity-recognition-bot"
+    "url": "https://github.com/sebsylvester/botbuilder-samples/tree/master/celebrity-recognition-bot"
   },
   "scripts": {
     "build": "tsc",
@@ -13,17 +13,18 @@
     "pretest": "tsc test/*.ts --module commonjs --sourcemap",
     "pretest:watch": "tsc test/*.ts --module commonjs --sourcemap --watch",
     "test": "nyc --reporter=lcov mocha",
-    "posttest": "nyc report",
-    "quicktest": "nyc --reporter=lcov mocha && nyc report"
+    "posttest": "nyc report"
   },
   "keywords": [
     "Microsoft Bot Framework",
     "BotBuilder SDK",
     "Microsoft Cognitive Services",
-    "Computer Vision"
+    "Computer Vision",
+    "chatbots",
+    "bots"
   ],
   "author": "Sebastian Sylvester",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "botbuilder": "^3.5.1",
     "request": "^2.79.0",
