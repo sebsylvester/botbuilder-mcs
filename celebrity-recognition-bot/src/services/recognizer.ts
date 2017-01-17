@@ -5,7 +5,7 @@ const config = require('../../config.json');
 
 // Endpoint for Microsoft's Computer Vision API
 // For more info, check out https://www.microsoft.com/cognitive-services/en-us/computer-vision-api
-const VISION_URL = "https://api.projectoxford.ai/vision/v1.0/analyze?details=Celebrities";
+const VISION_URL = "https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze?details=Celebrities";
 const API_KEY: string = process.env.MICROSOFT_VISION_API_KEY || config.MICROSOFT_VISION_API_KEY;
 
 interface IResponse {
