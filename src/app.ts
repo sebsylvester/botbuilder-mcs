@@ -10,8 +10,8 @@ const config = require('../config.json');
 
 // Create chat bot
 const connector = new ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID || config.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD || config.MICROSOFT_APP_PASSWORD
+    appId: process.env.APP_ID || config.APP_ID,
+    appPassword: process.env.APP_PASSWORD || config.APP_PASSWORD
 });
 const bot = new UniversalBot(connector);
 setAccessToken(bot);
@@ -24,20 +24,15 @@ bot.use(Middleware.firstRun({ version: 1.0, dialogId: '*:/firstRun' }));
 bot.use(Middleware.sendTyping());
 
 //=========================================================
-// Bots Global Actions
-//=========================================================
-
-// Triggered upon tapping the select button of a HeroCard in the suggestions dialog
-bot.beginDialogAction('newRequest', '/newRequest');
-
-//=========================================================
 // Bots Dialogs
 //=========================================================
 
 bot.dialog('/', dialogs.root);
-bot.dialog('/firstRun', dialogs.help);
+bot.dialog('/firstRun', dialogs.firstRun);
 bot.dialog('/newRequest', dialogs.newRequest);
-bot.dialog('/suggestions', dialogs.suggestions).triggerAction({ matches: /^suggestions/i });
+bot.dialog('/menu', dialogs.menu)
+    .triggerAction({ matches: /^API/i })
+    .cancelAction('cancelMenuAction', 'OK, nevermind', { matches: /(cancel|nevermind)/i })
 
 //=========================================================
 // Server Setup

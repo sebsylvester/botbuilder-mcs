@@ -5,31 +5,17 @@ import {
     Message,
     Session 
 } from 'botbuilder';
-import * as request from 'request';
 import { 
     processImageURL,
-    processImageStream,
-    ICelebrity
+    processImageStream
 } from '../services/recognizer';
+import { APIs } from '../helpers/consts';
 
-interface IArguments { 
-    url?: string,    
-    stream?: request.Request,
-    data?: string
-}
-
-const handleSuccessResponse = (session: Session, response: ICelebrity[]) => {
-    if (response.length === 0) {
-        session.send("Sorry, I couldn't recognize anybody.");
-        return session.endDialog("Try a different image or link.");
-    }
-
-    response.forEach((celebrity: ICelebrity) => {
-        const confidence = Math.floor(celebrity.confidence * 100);
-        session.send(`I've recognized ${celebrity.name} with ${confidence}% certainty`);
-    })
-    
-    return session.endDialog();
+const handleSuccessResponse = (session: Session, response: Object) => {
+    // Get the currently selected API
+    const { selectedAPI } = session.userData;
+    // Run the selected API's response handler
+    APIs[selectedAPI].handler(session, response);
 }
 
 const handleErrorResponse = (session: Session, error: Error) => {
@@ -38,25 +24,24 @@ const handleErrorResponse = (session: Session, error: Error) => {
 }
 
 // The /newRequest dialog handler
-export const newRequest = (session: Session, args: IArguments) => {
+export const newRequest = (session: Session, args: { url?: string, stream?: Object }) => {
     const { 
         url = null, 
-        stream = null, 
-        data = null 
+        stream = null
     } = (typeof args === 'object') ? args : {};
 
-    if (!url && !stream && !data) {
+    if (!url && !stream) {
         throw new Error('Invalid arguments. Expected a url string or an stream object.');
     }
 
     // Determine which function to use as recognizer
     const recognizer = stream 
         ? processImageStream.bind(null, stream) 
-        : processImageURL.bind(null, url || data);
+        : processImageURL.bind(null, url);
 
     // Make API call and handle error/response
-    recognizer()
-        .then((response: ICelebrity[]) => {
+    recognizer(session)
+        .then((response: Object) => {
             handleSuccessResponse(session, response)
         })
         .catch((error: Error) => {

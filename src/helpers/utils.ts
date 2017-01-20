@@ -59,6 +59,10 @@ export const getImageURL = (message: string): (string | null) => {
     return (parseAnchorTag(message) || (validUrl.isUri(message) ? message : null));
 }
 
+/**
+ * Sends a request for an image attachment and returns it as a stream
+ * @returns {ReadableStream}
+ */
 export const getImageStream = (attachment: IAttachment) => {
     if (!attachment || typeof attachment !== 'object') {
         throw new Error('Invalid argument: expected an attachment');

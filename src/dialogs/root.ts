@@ -1,7 +1,10 @@
 import {
-    Session,
+    CardAction, 
+    DialogAction,
     IntentDialog,
-    DialogAction
+    Message, 
+    Session,
+    ThumbnailCard 
 } from 'botbuilder';
 
 import {
@@ -12,23 +15,35 @@ import {
     getImageStream
 } from '../helpers/utils';
 
-// The handler used to respond to a number of greetings
+import { APIs } from '../helpers/consts';
+
+// Used to respond to a number of greetings
 const greet = (session: Session) => {
-    session.endDialog('Hey, have you tried sending me an image or image URL of a celebrity yet?');
+    session.endDialog('Hey, have you tried sending me an image or link yet?');
 };
 
-// The handler used when the user types "help"
+// Used when the user says "help"
 export const help = (session: Session) => {
-    session.send('Hi there! I can recognize celebrities in images. Just send me an image or a link.')
-    session.send('If you send me a link, make sure it starts with http:// or https://')
-    session.endDialog('If you need some suggestions, just say "suggestions".');
+    session.send('I am just a simple bot, I can only understand images and links to images.');
+    session.send('If you send me a link, make sure it starts with http:// or https://');
+    session.endDialog('Say “API” to see what APIs I can use.');
+};
+
+// Used when the user says "API"
+export const menu = (session: Session) => {
+    const card = new ThumbnailCard(session)
+        .buttons(APIs.map(item => CardAction.imBack(session, item.name, item.name)));
+
+    const message = new Message(session)
+        .text("Select one of these API's")
+        .addAttachment(card);
+
+    session.endDialog(message);
 };
 
 // The "/" or default dialog handler
 export const root = new IntentDialog()
-    // Respond to greetings
     .matches(/^(hello|hi|hey|howdy|sup|what's up|yo)/i, greet)
-    // Respond to requests for help
     .matches(/^help/i, help)
     .onDefault((session: Session, args: any) => {
         const { text, attachments } = session.message;
