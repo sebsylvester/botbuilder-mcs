@@ -1,6 +1,10 @@
 import { UniversalBot } from 'botbuilder';
 let accessToken: string = null;
 
+/**
+ * Checks if the message contains a hyperlink
+ * @param {UniversalBot} bot
+ */
 export const setAccessToken = (bot: UniversalBot) => {
     if (!(bot instanceof UniversalBot)) {
         throw new Error('Invalid argument: bot must be instance of UniversalBot');
@@ -14,6 +18,11 @@ export const setAccessToken = (bot: UniversalBot) => {
     });
 }
 
+/**
+ * Returns the bot's access token. 
+ * Only used to add authorization headers on requests to Skype.
+ * @returns {string}
+ */
 export const getAccessToken = (): (string|null) => {
     return accessToken;
 }

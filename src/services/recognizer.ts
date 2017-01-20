@@ -1,30 +1,7 @@
 ///<reference path="../../node_modules/typescript/lib/lib.es6.d.ts" />
 import * as request from 'request';
-import { IAttachment } from 'botbuilder';
-const config = require('../../config.json');
-
-// Endpoint for Microsoft's Computer Vision API
-// For more info, check out https://www.microsoft.com/cognitive-services/en-us/computer-vision-api
-const VISION_API_URL = "https://westus.api.cognitive.microsoft.com/vision/v1.0/analyze?details=Celebrities";
-const EMOTION_API_URL = "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize";
-const API_KEY: string = process.env.MICROSOFT_VISION_API_KEY || config.MICROSOFT_VISION_API_KEY;
-
-interface IResponse {
-    categories: ICategory[];
-}
-
-interface ICategory {
-    name: string; 
-    score: number;
-    detail?: { 
-        celebrities: ICelebrity[]
-    }
-}
-
-export interface ICelebrity {
-    name: string;
-    confidence: number;
-}
+import { Session } from 'botbuilder';
+import { APIs } from '../helpers/consts';
 
 /**
  * Called when the user sends an image attachment.
@@ -32,14 +9,16 @@ export interface ICelebrity {
  * @param {Request} stream The GET request to fetch the image
  * @returns {Promise} The asynchronous operation is unpacked by the caller
  */
-export const processImageStream = (stream: any): Promise<any> => {
+export const processImageStream = (stream: any, session: Session): Promise<any> => {
     return new Promise((resolve, reject) => {
+        // Get the currently selected API
+        const { selectedAPI } = session.userData;
         // Define request options
         const options = {
-            url: VISION_API_URL,
+            url: APIs[selectedAPI].url,
             encoding: 'binary',
             headers: { 
-                'Ocp-Apim-Subscription-Key': API_KEY,
+                'Ocp-Apim-Subscription-Key': APIs[selectedAPI].key,
                 'Content-Type': 'application/octet-stream'
             }
         };
@@ -52,10 +31,8 @@ export const processImageStream = (stream: any): Promise<any> => {
 
             // If status == 200, body needs to be parsed as JSON
             body = (typeof body === 'string') ? JSON.parse(body) : body;
-            if (response.statusCode != 200) {
-                return reject(body);
-            }
-            return resolve(extractCelebrities(body));
+            if (response.statusCode != 200) reject(body);
+            else resolve(body);
         }));
     });
 }
@@ -66,50 +43,22 @@ export const processImageStream = (stream: any): Promise<any> => {
  * @param {string} url The URL sent by the user
  * @returns {Promise} The asynchronous operation is unpacked by the caller
  */
-export const processImageURL = (url: string): Promise<any> => {
-    return new Promise((resolve, reject) => {     
+export const processImageURL = (url: string, session: Session): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        // Get the currently selected API
+        const { selectedAPI } = session.userData;
         // Define request options
         const options = {
-            url: VISION_API_URL,
+            url: APIs[selectedAPI].url,
             json: { url },
-            headers: { 'Ocp-Apim-Subscription-Key': API_KEY }
+            headers: { 'Ocp-Apim-Subscription-Key': APIs[selectedAPI].key }
         };
 
         // Make API call and handle error/response
-        request.post(options, (error: Error, response: any, body: IResponse) => {
-            if (error) {
-                reject(error);
-            }
-            else if (response.statusCode != 200) {
-                reject(body);
-            }
-            else {
-                resolve(extractCelebrities(body));
-            }
+        request.post(options, (error: Error, response: any, body: any) => {
+            if (error) reject(error);
+            else if (response.statusCode != 200) reject(body);
+            else resolve(body);
         });
     });
-}
-
-/**
- * Extracts the caption description from the response of the Vision API
- * @param {Object} body Response of the Vision API
- * @return {string} Description if caption found, null otherwise.
- */
-export const extractCelebrities = (body: IResponse): ICelebrity[] => {
-    let result = [] as ICelebrity[];
-
-    if (!body || !body.categories) {
-        throw new Error('Invalid response body, missing categories property');
-    }
-
-    body.categories.forEach((category: ICategory) => {
-        if (category.detail && category.detail.celebrities) {
-            category.detail.celebrities.forEach(celebrity => {
-                const { name, confidence } = celebrity;
-                result.push({ name, confidence });
-            });
-        }
-    });
-
-    return result;
 }

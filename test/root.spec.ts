@@ -12,7 +12,7 @@ describe('dialog /', function () {
 
         bot.dialog('/', root);
         bot.on('send', function (message) {
-            expect(message.text).to.equal('Hey, have you tried sending me an image or image URL of a celebrity yet?');
+            expect(message.text).to.equal('Hey, have you tried sending me an image or link yet?');
             done();
         });
 
@@ -28,13 +28,13 @@ describe('dialog /', function () {
         bot.on('send', message => {
             switch (++step) {
                 case 1:
-                    expect(message.text).to.equal('Hi there! I can recognize celebrities in images. Just send me an image or a link.');
+                    expect(message.text).to.equal('Currently, I can only work with images and links to images.');
                     break;
                 case 2:
                     expect(message.text).to.equal('If you send me a link, make sure it starts with http:// or https://');
                     break;
                 case 3:
-                    expect(message.text).to.equal('If you need some suggestions, just say "suggestions".');
+                    expect(message.text).to.equal('Say “menu” to see what I can do.');
                     done();
                     break;
             }
