@@ -7,6 +7,7 @@ import { APIs } from '../helpers/consts';
  * Called when the user sends an image attachment.
  * The image is streamed from the host and to the API endpoint.
  * @param {Request} stream The GET request to fetch the image
+ * @param {Session} session Holds the state of the user's session
  * @returns {Promise} The asynchronous operation is unpacked by the caller
  */
 export const processImageStream = (stream: any, session: Session): Promise<any> => {
@@ -41,6 +42,7 @@ export const processImageStream = (stream: any, session: Session): Promise<any> 
  * Called when the user sends an image link.
  * In this case the link is simply posted to the API endpoint.
  * @param {string} url The URL sent by the user
+ * @param {Session} session Holds the state of the user's session
  * @returns {Promise} The asynchronous operation is unpacked by the caller
  */
 export const processImageURL = (url: string, session: Session): Promise<any> => {
