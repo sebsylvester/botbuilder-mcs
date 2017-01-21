@@ -29,18 +29,6 @@ export const help = (session: Session) => {
     session.endDialog('Say “API” to see what APIs I can use.');
 };
 
-// Used when the user says "API"
-export const menu = (session: Session) => {
-    const card = new ThumbnailCard(session)
-        .buttons(APIs.map(item => CardAction.imBack(session, item.name, item.name)));
-
-    const message = new Message(session)
-        .text("Select one of these API's")
-        .addAttachment(card);
-
-    session.endDialog(message);
-};
-
 // The "/" or default dialog handler
 export const root = new IntentDialog()
     .matches(/^(hello|hi|hey|howdy|sup|what's up|yo)/i, greet)
