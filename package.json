@@ -1,11 +1,11 @@
 {
-  "name": "celebrity-recognition-bot",
+  "name": "botbuilder-mcs",
   "version": "1.0.0",
-  "description": "A simple bot that demos some APIs of Microsoft's Cognitive Services.",
+  "description": "A sample bot that demonstrates some APIs of Microsoft's Cognitive Services.",
   "main": "lib/app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sebsylvester/botbuilder-samples/tree/master/celebrity-recognition-bot"
+    "url": "https://github.com/sebsylvester/botbuilder-mcs.git"
   },
   "scripts": {
     "build": "tsc",
@@ -15,14 +15,14 @@
     "test": "nyc --reporter=lcov mocha",
     "posttest": "nyc report",
     "start": "node lib/app.js",
-    "postinstall": "npm run build",
-    "quicktest": "nyc --reporter=lcov mocha && nyc report"
+    "postinstall": "npm run build"
   },
   "keywords": [
     "Microsoft Bot Framework",
     "BotBuilder SDK",
     "Microsoft Cognitive Services",
     "Computer Vision API",
+    "Emotion API",
     "chatbots",
     "bots"
   ],
@@ -30,6 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "botbuilder": "^3.5.3",
+    "lodash.sortby": "^4.7.0",
     "needle": "^1.4.3",
     "request": "^2.79.0",
     "restify": "^4.3.0",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@types/chai": "^3.4.34",
+    "@types/lodash.sortby": "^4.7.0",
     "@types/mocha": "^2.2.38",
     "@types/needle": "^0.7.29",
     "@types/node": "^6.0.52",
