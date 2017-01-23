@@ -1,4 +1,5 @@
 import { Session } from 'botbuilder';
+const sortBy = require('lodash.sortby');
 
 // Some types to deal with the response of the Computer Vision API
 interface IComputerVisionResponse {
@@ -16,10 +17,13 @@ interface ICategory {
 interface ICelebrity {
     name: string;
     confidence: number;
+    faceRectangle: IRectangle;
 }
 
+// Some types to deal with the response of the Emotion API
 interface IEmotionResponse {
     scores: IScore;
+    faceRectangle: IRectangle;
 }
 
 interface IScore {
@@ -30,7 +34,15 @@ interface IScore {
     happiness: number,
     neutral: number,
     sadness: number,
-    surprise: number
+    surprise: number,
+    [propName: string]: number;
+}
+
+interface IRectangle {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
 }
 
 /**
@@ -43,13 +55,12 @@ export const handleComputerVisionResponse = (session: Session, response: IComput
         throw new Error('Invalid response body, missing categories property');
     }
 
-    // Collect the results in the response
+    // Collect all the results in the response object
     let result = [] as ICelebrity[];
     response.categories.forEach((category: ICategory) => {
         if (category.detail && category.detail.celebrities) {
             category.detail.celebrities.forEach(celebrity => {
-                const { name, confidence } = celebrity;
-                result.push({ name, confidence });
+                result.push(celebrity);
             });
         }
     });
@@ -59,6 +70,12 @@ export const handleComputerVisionResponse = (session: Session, response: IComput
         session.send("Sorry, I couldn't recognize anybody.");
         return session.endDialog("Try a different image or link.");
     }
+
+    // If there multiple results, sort them by bounding box, from left to right
+    if (result.length > 1 ) {
+        result = sortBy(result, [function(item: ICelebrity) { return item.faceRectangle.left; }]);
+        session.send('I detected a number of celebrities, the results are from left to right.');        
+    }    
 
     // Send a message for each result
     result.forEach((celebrity: ICelebrity) => {
@@ -84,17 +101,26 @@ export const handleEmotionResponse = (session: Session, response: IEmotionRespon
         return session.endDialog('Try a different image or link.');
     }
     
+    // If there multiple results, sort them by bounding box, from left to right
     if (response.length > 1 ) {
-        session.send('I detected a number of faces, so the result may be a confusing.');
-    } else {
-        session.send("OK, this is what I've detected on this image:");
+        response = sortBy(response, [function(item: IEmotionResponse) { return item.faceRectangle.left; }]);
+        session.send('I detected a number of faces, the results are from left to right.');     
     }
     
     // Iterate through the response array
-    response.forEach((r: IEmotionResponse) => {
-        const { anger, contempt, disgust, fear, happiness, neutral, sadness, surprise } = r.scores;
-        session.send(`anger: ${anger}\n\n contempt: ${contempt}\n\n disgust: ${disgust}\n\n fear: ${fear}\n\n happiness: ${happiness}\n\n neutral: ${neutral}\n\n sadness: ${sadness}\n\n surprise: ${surprise}`);
+    response.forEach((response: IEmotionResponse) => {
+        const { scores } = response;
+
+        // Find the highest scoring emotion in scores
+        let max = 0, emotion;
+        for (let key in scores) {
+            if (scores[key] > max) {
+                max = scores[key];
+                emotion = key;
+            }
+        }
+        const confidence = Math.floor(max * 100)
+        session.send(`I've recognized ${emotion} with ${confidence}% certainty`);
     });
-    
     session.endDialog();
 }
