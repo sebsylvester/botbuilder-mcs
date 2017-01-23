@@ -33,7 +33,7 @@ You'll need to add (free) subscriptions for the Computer Vision and Emotion APIs
 
 ## Issue with the Emotion API
 The Emotion API works great with URLs, not so great with attachments. 
-I've posted an [issue](https://) on Stack Overflow about this.
+I've posted an [issue](http://stackoverflow.com/questions/41806979/microsoft-cognitive-services-emotion-api-error-image-size-is-too-small-or-too) on Stack Overflow about this.
 There is no such problem with the Computer Vision API, so I think this something Microsoft needs to fix.
 
 ## Screenshots
