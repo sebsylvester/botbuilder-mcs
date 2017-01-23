@@ -8,23 +8,19 @@ The bot currently uses two APIs. The Computer Vision API with a domain-specific 
 and the Emotion API to recognize the dominant emotion in facial expressions.
 
 ## Run locally with the Bot Framework Emulator
-1. Do some basic setup:
-```
-git clone https://github.com/sebsylvester/botbuilder-mcs.git
-cd botbuilder-mcs
-npm install
-```
-2. Go the Bot Framework's [Developer Portal](https://dev.botframework.com/bots/new) and create a new bot.
+1. Get the code ```git clone https://github.com/sebsylvester/botbuilder-mcs.git```
+2. Install dependencies ```cd botbuilder-mcs && npm install```
+3. Go the Bot Framework's [Developer Portal](https://dev.botframework.com/bots/new) and create a new bot.
 Copy and paste the app id and app password somewhere, you will need them later to connect the emulator to the bot.
-3. [Sign up](https://www.microsoft.com/cognitive-services/en-us/sign-up) with Microsoft Cognitive Services to get the API keys.
+4. [Sign up](https://www.microsoft.com/cognitive-services/en-us/sign-up) with Microsoft Cognitive Services to get the API keys.
 You'll need to add (free) subscriptions for the Computer Vision and Emotion APIs.
-4. Configure the bot by replacing the placeholder values in the ```config.json``` file with your app id, app password and the API keys.
-5. Run ```npm start``` and check if the server is listening.
-6. Start up the emulator (download it [here](https://github.com/microsoft/botframework-emulator/wiki/Getting-Started)), enter your app id and app password again and connect to the bot.
+5. Configure the bot by replacing the placeholder values in the ```config.json``` file with your app id, app password and the API keys.
+6. Run ```npm start``` and check if the server is listening.
+7. Start up the emulator (download it [here](https://github.com/microsoft/botframework-emulator/wiki/Getting-Started)), enter your app id and app password again and connect to the bot.
 
 ## Deploy to Heroku
 1. Run ```git clone https://github.com/sebsylvester/botbuilder-mcs.git```
-2. Repeat step 2, 3 and 4 of the previous section
+2. Repeat steps 3 and 4 of the previous section.
 3. Optionally, you can configure additional channels besides Skype and Web Chat.
 4. If necessary, install [Heroku Command Line Interface](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).
 5. From the directory of the cloned repo run ```heroku apps:create [name]```
