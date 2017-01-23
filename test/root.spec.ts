@@ -1,5 +1,5 @@
 ///<reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
-const { root, defaultHandler } = require('../lib/dialogs/root');
+const { root } = require('../lib/dialogs/root');
 import { ConsoleConnector, UniversalBot } from 'botbuilder';
 import { expect } from 'chai';
 import * as needle from 'needle';
@@ -28,13 +28,13 @@ describe('dialog /', function () {
         bot.on('send', message => {
             switch (++step) {
                 case 1:
-                    expect(message.text).to.equal('Currently, I can only work with images and links to images.');
+                    expect(message.text).to.equal('I am just a simple bot, I can only understand images and links to images.');
                     break;
                 case 2:
                     expect(message.text).to.equal('If you send me a link, make sure it starts with http:// or https://');
                     break;
                 case 3:
-                    expect(message.text).to.equal('Say “menu” to see what I can do.');
+                    expect(message.text).to.equal('Say “API” to see what APIs I can use.');
                     done();
                     break;
             }
