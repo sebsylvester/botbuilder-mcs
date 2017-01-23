@@ -32,9 +32,10 @@ You'll need to add (free) subscriptions for the Computer Vision and Emotion APIs
 7. ```git push heroku master```
 
 ## Issue with the Emotion API
-The Emotion API works great with URLs, not so great with attachments. 
+All APIs are still in preview, so things may not be perfect just yet.
+The Emotion API, for example, works great with URLs, not so great with image attachments.
 I've posted an [issue](http://stackoverflow.com/questions/41806979/microsoft-cognitive-services-emotion-api-error-image-size-is-too-small-or-too) on Stack Overflow about this.
-There is no such problem with the Computer Vision API, so I think this something Microsoft needs to fix.
+There is no similar problem with the Computer Vision API.
 
 ## Screenshots
 ![Celebrity recognition feature](https://cloud.githubusercontent.com/assets/3374297/22204554/da17f586-e172-11e6-89ff-56e3b753c551.png)
