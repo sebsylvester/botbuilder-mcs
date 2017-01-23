@@ -1,4 +1,3 @@
-///<reference path="../../node_modules/typescript/lib/lib.es6.d.ts" />
 import * as request from 'request';
 import { Session } from 'botbuilder';
 import { APIs } from '../helpers/consts';
