@@ -2,6 +2,13 @@ import * as request from 'request';
 import { Session } from 'botbuilder';
 import { APIs } from '../helpers/consts';
 
+interface IRequestOptions {
+    url: string;
+    encoding: string;
+    headers: Object;
+    body?: any;
+}
+
 /**
  * Called when the user sends an image attachment.
  * The image is streamed from the host and to the API endpoint.
@@ -13,8 +20,10 @@ export const processImageStream = (stream: any, session: Session): Promise<any> 
     return new Promise((resolve, reject) => {
         // Get the currently selected API
         const { selectedAPI } = session.userData;
+        const chunked = APIs[selectedAPI].chunked;
+
         // Define request options
-        const options = {
+        const options: IRequestOptions = {
             url: APIs[selectedAPI].url,
             encoding: 'binary',
             headers: { 
@@ -23,17 +32,36 @@ export const processImageStream = (stream: any, session: Session): Promise<any> 
             }
         };
 
-        // Make API call and handle error/response
-        stream.pipe(request.post(options, (error: Error, response: any, body: any) => {
-            if (error) {
-                return reject(error);
-            }
-
-            // If status == 200, body needs to be parsed as JSON
-            body = (typeof body === 'string') ? JSON.parse(body) : body;
-            if (response.statusCode != 200) reject(body);
-            else resolve(body);
-        }));
+        // Stream data directly to endpoint if it supports chunked encoding
+        if(chunked) {
+            // Make API call and handle error/response
+            stream.pipe(request.post(options, (error: Error, response: any, body: any) => {
+                if (error) {
+                    return reject(error);
+                }
+                // If status == 200, body needs to be parsed as JSON
+                body = (typeof body === 'string') ? JSON.parse(body) : body;
+                if (response.statusCode != 200) reject(body);
+                else resolve(body);
+            }));
+        } else {
+            // Buffer all of the stream in memory before sending to endpoint
+            let buffer: Buffer[] = [];
+            stream.on('data', (chunk: Buffer) => {
+                buffer.push(chunk);
+            }).on('end', () => {
+                options.body = Buffer.concat(buffer);
+                request.post(options, (error: Error, response: any, body: any) => {
+                    if (error) {
+                        return reject(error);
+                    }
+                    // If status == 200, body needs to be parsed as JSON
+                    body = (typeof body === 'string') ? JSON.parse(body) : body;
+                    if (response.statusCode != 200) reject(body);
+                    else resolve(body);
+                });
+            });
+        }
     });
 }
 
