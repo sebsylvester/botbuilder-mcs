@@ -1,6 +1,6 @@
 {
   "name": "botbuilder-mcs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A sample bot that demonstrates some APIs of Microsoft's Cognitive Services.",
   "main": "lib/app.js",
   "repository": {
