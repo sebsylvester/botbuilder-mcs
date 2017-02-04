@@ -28,8 +28,10 @@
   ],
   "author": "Sebastian Sylvester",
   "license": "MIT",
+  "bugs": "https://github.com/sebsylvester/botbuilder-mcs/issues",
+  "homepage": "https://github.com/sebsylvester/botbuilder-mcs",
   "dependencies": {
-    "botbuilder": "^3.5.3",
+    "botbuilder": "^3.6.0",
     "lodash.sortby": "^4.7.0",
     "needle": "^1.4.3",
     "request": "^2.79.0",
@@ -39,7 +41,7 @@
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/lodash.sortby": "^4.7.0",
-    "@types/mocha": "^2.2.38",
+    "@types/mocha": "^2.2.39",
     "@types/needle": "^0.7.29",
     "@types/node": "^6.0.61",
     "@types/request": "0.0.39",
@@ -51,6 +53,6 @@
     "mocha": "^3.2.0",
     "nyc": "^10.1.2",
     "sinon": "^1.17.6",
-    "typescript": "^2.1.4"
+    "typescript": "2.1.5"
   }
 }
