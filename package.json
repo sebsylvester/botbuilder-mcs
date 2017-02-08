@@ -33,7 +33,7 @@
   "dependencies": {
     "botbuilder": "^3.6.0",
     "lodash.sortby": "^4.7.0",
-    "needle": "^1.4.3",
+    "needle": "^1.4.5",
     "request": "^2.79.0",
     "restify": "^4.3.0",
     "valid-url": "^1.0.9"
@@ -42,8 +42,8 @@
     "@types/chai": "^3.4.34",
     "@types/lodash.sortby": "^4.7.0",
     "@types/mocha": "^2.2.39",
-    "@types/needle": "^0.7.29",
-    "@types/node": "^6.0.61",
+    "@types/needle": "^1.4.0",
+    "@types/node": "^7.0.5",
     "@types/request": "0.0.39",
     "@types/restify": "^2.0.38",
     "@types/sinon": "^1.16.34",
