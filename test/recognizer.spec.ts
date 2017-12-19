@@ -12,7 +12,7 @@ describe('recognizer module', function () {
         const session = { userData: { selectedAPI: 0 }};
 
         it('should catch thrown exceptions', function (done) {
-            sinon.stub(request, 'post', (options, callback) => {                
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(new Error('Something went wrong'));
             });
 
@@ -25,7 +25,7 @@ describe('recognizer module', function () {
 
         it('should handle returned error messages', function (done) {
             const body = { error : "Bad auth, check token/params", code : "no-auth" };
-            sinon.stub(request, 'post', (options, callback) => {
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(null, { statusCode: 401 }, body);                
             });
 
@@ -37,7 +37,7 @@ describe('recognizer module', function () {
         });            
 
         it('should handle success responses', function (done) {
-            sinon.stub(request, 'post', (options, callback) => {
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(null, { statusCode: 200 }, JSON.stringify({ result: true }));                
             });
 
@@ -56,7 +56,7 @@ describe('recognizer module', function () {
 
         it('should catch thrown exceptions', function (done) {
             const stream = fs.createReadStream(path.resolve(__dirname, '../README.md'));
-            sinon.stub(request, 'post', (options, callback) => {                
+            sinon.stub(request, 'post').callsFake((options, callback) => {      
                 callback(new Error('Something went wrong'));
             });
 
@@ -70,7 +70,7 @@ describe('recognizer module', function () {
         it('should handle returned error messages', function (done) {
             const stream = fs.createReadStream(path.resolve(__dirname, '../README.md'));
             const body = { error : "Bad auth, check token/params", code : "no-auth" };
-            sinon.stub(request, 'post', (options, callback) => {
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(null, { statusCode: 401 }, body);
             });
 
@@ -83,7 +83,7 @@ describe('recognizer module', function () {
 
         it('should handle success responses', function (done) {
             const stream = fs.createReadStream(path.resolve(__dirname, '../README.md'));
-            sinon.stub(request, 'post', (options, callback) => {
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(null, { statusCode: 200 }, JSON.stringify({ result: true }));                
             });
 
@@ -101,7 +101,7 @@ describe('recognizer module', function () {
         const session = { userData: { selectedAPI: 0 }};
 
         it('should catch thrown exceptions', function (done) {
-            sinon.stub(request, 'post', (options, callback) => {                
+            sinon.stub(request, 'post').callsFake((options, callback) => {      
                 callback(new Error('Something went wrong'));                
             });
 
@@ -114,7 +114,7 @@ describe('recognizer module', function () {
 
         it('should handle returned error messages', function (done) {
             const body = { error : "Bad auth, check token/params", code : "no-auth" };
-            sinon.stub(request, 'post', (options, callback) => {
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(null, { statusCode: 401 }, body);                
             });
 
@@ -126,7 +126,7 @@ describe('recognizer module', function () {
         });
 
         it('should handle success responses', function (done) {
-            sinon.stub(request, 'post', (options, callback) => {
+            sinon.stub(request, 'post').callsFake((options, callback) => {
                 callback(null, { statusCode: 200 }, { result: true });                
             });
 
