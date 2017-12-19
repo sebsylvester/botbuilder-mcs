@@ -51,7 +51,7 @@ describe('dialog /newRequest', function () {
             } 
         }
 
-        sinon.stub(recognizer, 'processImageStream', () => {
+        sinon.stub(recognizer, 'processImageStream').callsFake(() => {
             return Promise.reject(new Error('Something failed'));
         });
 
@@ -71,7 +71,7 @@ describe('dialog /newRequest', function () {
         const bot = new UniversalBot(connector);
         let step = 0;
         
-        sinon.stub(recognizer, 'processImageURL', () => {
+        sinon.stub(recognizer, 'processImageURL').callsFake(() => {
             return Promise.reject(new Error('Something failed'));
         });
         
@@ -93,11 +93,11 @@ describe('dialog /newRequest', function () {
         const bot = new UniversalBot(connector);
         const ComputerVisionAPI = APIs[0];
 
-        sinon.stub(recognizer, 'processImageURL', (args) => {
+        sinon.stub(recognizer, 'processImageURL').callsFake(args => {
             return Promise.resolve({ result: true });
         });
         
-        sinon.stub(ComputerVisionAPI, 'handler', (session, response) => {
+        sinon.stub(ComputerVisionAPI, 'handler').callsFake((session, response) => {
             expect(response).to.deep.equal({ result: true });
             ComputerVisionAPI.handler.restore();
             recognizer.processImageURL.restore();
@@ -125,11 +125,11 @@ describe('dialog /newRequest', function () {
         const bot = new UniversalBot(connector);
         const EmotionAPI = APIs[1];
 
-        sinon.stub(recognizer, 'processImageURL', (args) => {
+        sinon.stub(recognizer, 'processImageURL').callsFake(args => {
             return Promise.resolve({ result: true });
         });
         
-        sinon.stub(EmotionAPI, 'handler', (session, response) => {
+        sinon.stub(EmotionAPI, 'handler').callsFake((session, response) => {
             expect(response).to.deep.equal({ result: true });
             EmotionAPI.handler.restore();
             recognizer.processImageURL.restore();

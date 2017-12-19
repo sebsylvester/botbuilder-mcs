@@ -51,7 +51,7 @@ describe('dialog /', function () {
         
         // Mock Request
         function Request () {}
-        sinon.stub(needle, 'get', (url, options) => {
+        sinon.stub(needle, 'get').callsFake((url, options) => {
             expect(url).to.equal(attachment.contentUrl);
             expect(options.headers).to.deep.equal({
                 "Content-Type": attachment.contentType

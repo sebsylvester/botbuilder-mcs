@@ -103,7 +103,7 @@ describe('utils module', function () {
                 contentType: 'image/jpeg'
             }
 
-            sinon.stub(needle, 'get', (contentUrl, options) => {
+            sinon.stub(needle, 'get').callsFake((contentUrl, options) => {
                 expect(contentUrl).to.equal(attachment.contentUrl);
                 expect(options.headers['Content-Type']).to.equal(attachment.contentType);
                 (<any>needle.get).restore();
@@ -117,8 +117,8 @@ describe('utils module', function () {
                 contentUrl: 'https://apis.skype.com/v2/attachments/foo',
                 contentType: 'image/jpeg'
             }
-            sinon.stub(token, 'getAccessToken', () => 'some_access_token');
-            sinon.stub(needle, 'get', (contentUrl, options) => {
+            sinon.stub(token, 'getAccessToken').callsFake(() => 'some_access_token');
+            sinon.stub(needle, 'get').callsFake((contentUrl, options) => {
                 expect(contentUrl).to.equal(attachment.contentUrl);
                 expect(options.headers['Authorization']).to.equal('Bearer some_access_token');
                 expect(options.headers['Content-Type']).to.equal('application/octet-stream');
