@@ -1,5 +1,10 @@
 import * as restify from 'restify';
-import { ChatConnector, UniversalBot, Middleware } from 'botbuilder';
+import { 
+    ChatConnector, 
+    UniversalBot, 
+    Middleware,
+    MemoryBotStorage 
+} from 'botbuilder';
 import * as dialogs from './dialogs';
 import { setAccessToken } from './helpers/accessToken';
 const config = require('../config.json');
@@ -14,6 +19,8 @@ const connector = new ChatConnector({
     appPassword: process.env.APP_PASSWORD || config.APP_PASSWORD
 });
 const bot = new UniversalBot(connector);
+// Register in-memory storage
+bot.set('storage', new MemoryBotStorage());
 setAccessToken(bot);
 
 //=========================================================
