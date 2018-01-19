@@ -1,199 +1,199 @@
-import { ConsoleConnector, UniversalBot } from 'botbuilder';
-import * as sinon from 'sinon';
-import { expect } from 'chai';
-const handlers = require('../lib/helpers/handlers');
+import { ConsoleConnector, UniversalBot } from "botbuilder";
+import { expect } from "chai";
+import * as sinon from "sinon";
+const handlers = require("../lib/helpers/handlers");
 
 // Actual server response when sending the infamous Oscar's selfie => https://goo.gl/MJl4eV
 const ComputerVision = {
   successResponseMultiple: {
-    "categories": [
+    categories: [
       {
-        "name": "people_group",
-        "score": 0.8046875,
-        "detail": {
-          "celebrities": [
+        name: "people_group",
+        score: 0.8046875,
+        detail: {
+          celebrities: [
             {
-              "name": "Bradley Cooper",
-              "faceRectangle": {
-                "left": 649,
-                "top": 312,
-                "width": 266,
-                "height": 266
+              name: "Bradley Cooper",
+              faceRectangle: {
+                left: 649,
+                top: 312,
+                width: 266,
+                height: 266,
               },
-              "confidence": 0.9993013
+              confidence: 0.9993013,
             },
             {
-              "name": "Ellen Degeneres",
-              "faceRectangle": {
-                "left": 410,
-                "top": 285,
-                "width": 195,
-                "height": 195
+              name: "Ellen Degeneres",
+              faceRectangle: {
+                left: 410,
+                top: 285,
+                width: 195,
+                height: 195,
               },
-              "confidence": 0.999961853
+              confidence: 0.999961853,
             },
             {
-              "name": "Jennifer Lawrence",
-              "faceRectangle": {
-                "left": 116,
-                "top": 78,
-                "width": 185,
-                "height": 185
+              name: "Jennifer Lawrence",
+              faceRectangle: {
+                left: 116,
+                top: 78,
+                width: 185,
+                height: 185,
               },
-              "confidence": 0.9473655
+              confidence: 0.9473655,
             },
             {
-              "name": "Julia Fiona Roberts",
-              "faceRectangle": {
-                "left": 430,
-                "top": 25,
-                "width": 140,
-                "height": 140
+              name: "Julia Fiona Roberts",
+              faceRectangle: {
+                left: 430,
+                top: 25,
+                width: 140,
+                height: 140,
               },
-              "confidence": 0.987559736
-            }
-          ]
-        }
-      }
+              confidence: 0.987559736,
+            },
+          ],
+        },
+      },
     ],
-    "requestId": "c4189a0d-6875-4adf-b206-91520b7c2c0f",
-    "metadata": {
-      "width": 1200,
-      "height": 630,
-      "format": "Jpeg"
-    }
+    requestId: "c4189a0d-6875-4adf-b206-91520b7c2c0f",
+    metadata: {
+      width: 1200,
+      height: 630,
+      format: "Jpeg",
+    },
   },
   successResponseSingle: {
-    "categories": [
+    categories: [
       {
-        "name": "people_portrait",
-        "score": 0.8046875,
-        "detail": {
-          "celebrities": [
+        name: "people_portrait",
+        score: 0.8046875,
+        detail: {
+          celebrities: [
             {
-              "name": "Jennifer Lawrence",
-              "faceRectangle": {
-                "left": 116,
-                "top": 78,
-                "width": 185,
-                "height": 185
+              name: "Jennifer Lawrence",
+              faceRectangle: {
+                left: 116,
+                top: 78,
+                width: 185,
+                height: 185,
               },
-              "confidence": 0.9473655
-            }
-          ]
-        }
-      }
+              confidence: 0.9473655,
+            },
+          ],
+        },
+      },
     ],
-    "requestId": "c4189a0d-6875-4adf-b206-91520b7c2c0f",
-    "metadata": {
-      "width": 1200,
-      "height": 630,
-      "format": "Jpeg"
-    }
+    requestId: "c4189a0d-6875-4adf-b206-91520b7c2c0f",
+    metadata: {
+      width: 1200,
+      height: 630,
+      format: "Jpeg",
+    },
   },
   emptyResponse: {
-    "categories": [
+    categories: [
       {
-        "name": "people_group",
-        "score": 0.98046875,
-        "detail": {
-          "celebrities": []
-        }
+        name: "people_group",
+        score: 0.98046875,
+        detail: {
+          celebrities: [],
+        },
       },
       {
-        "name": "people_unknown",
-        "score": 0.99,
-      }
+        name: "people_unknown",
+        score: 0.99,
+      },
     ],
-    "requestId": "c4189a0d-6875-4adf-b206-91520b7c2c0f",
-    "metadata": {
-      "width": 1200,
-      "height": 630,
-      "format": "Jpeg"
-    }
-  }
-}
+    requestId: "c4189a0d-6875-4adf-b206-91520b7c2c0f",
+    metadata: {
+      width: 1200,
+      height: 630,
+      format: "Jpeg",
+    },
+  },
+};
 const Emotion = {
   successResponseMultiple: [
     {
-      "faceRectangle": {
-        "left": 488,
-        "top": 263,
-        "width": 148,
-        "height": 148
+      faceRectangle: {
+        left: 488,
+        top: 263,
+        width: 148,
+        height: 148,
       },
-      "scores": {
-        "anger": 9.075572e-13,
-        "contempt": 7.048959e-9,
-        "disgust": 1.02152783e-11,
-        "fear": 1.778957e-14,
-        "happiness": 0.9999999,
-        "neutral": 1.31694478e-7,
-        "sadness": 6.04054263e-12,
-        "surprise": 3.92249462e-11
-      }
+      scores: {
+        anger: 9.075572e-13,
+        contempt: 7.048959e-9,
+        disgust: 1.02152783e-11,
+        fear: 1.778957e-14,
+        happiness: 0.9999999,
+        neutral: 1.31694478e-7,
+        sadness: 6.04054263e-12,
+        surprise: 3.92249462e-11,
+      },
     },
     {
-      "faceRectangle": {
-        "left": 153,
-        "top": 251,
-        "width": 133,
-        "height": 133
+      faceRectangle: {
+        left: 153,
+        top: 251,
+        width: 133,
+        height: 133,
       },
-      "scores": {
-        "anger": 6.2065344e-9,
-        "contempt": 1.08080636e-11,
-        "disgust": 3.30821842e-10,
-        "fear": 1.02974018e-11,
-        "happiness": 1,
-        "neutral": 1.2882297e-8,
-        "sadness": 2.63420341e-10,
-        "surprise": 4.30664e-10
-      }
-    }
+      scores: {
+        anger: 6.2065344e-9,
+        contempt: 1.08080636e-11,
+        disgust: 3.30821842e-10,
+        fear: 1.02974018e-11,
+        happiness: 1,
+        neutral: 1.2882297e-8,
+        sadness: 2.63420341e-10,
+        surprise: 4.30664e-10,
+      },
+    },
   ],
   successResponseSingle: [
     {
-      "faceRectangle": {
-        "left": 488,
-        "top": 263,
-        "width": 148,
-        "height": 148
+      faceRectangle: {
+        left: 488,
+        top: 263,
+        width: 148,
+        height: 148,
       },
-      "scores": {
-        "anger": 9.075572e-13,
-        "contempt": 7.048959e-9,
-        "disgust": 1.02152783e-11,
-        "fear": 1.778957e-14,
-        "happiness": 0.9999999,
-        "neutral": 1.31694478e-7,
-        "sadness": 6.04054263e-12,
-        "surprise": 3.92249462e-11
-      }
-    }
+      scores: {
+        anger: 9.075572e-13,
+        contempt: 7.048959e-9,
+        disgust: 1.02152783e-11,
+        fear: 1.778957e-14,
+        happiness: 0.9999999,
+        neutral: 1.31694478e-7,
+        sadness: 6.04054263e-12,
+        surprise: 3.92249462e-11,
+      },
+    },
   ],
-  emptyResponse: []
-}
+  emptyResponse: [],
+};
 
-describe('handlers module', function () {
-    describe('handleComputerVisionResponse', function () {
+describe("handlers module", () => {
+    describe("handleComputerVisionResponse", () => {
         const { handleComputerVisionResponse } = handlers;
 
-        it('should throw if invoked with an invalid argument', function () {
-            expect(handleComputerVisionResponse).to.throw('Invalid response body, missing categories property');
+        it("should throw if invoked with an invalid argument", () => {
+            expect(handleComputerVisionResponse).to.throw("Invalid response body, missing categories property");
         });
 
-        it('should handle an empty response', function (done) {
+        it("should handle an empty response", (done) => {
             const connector = new ConsoleConnector();
             const bot = new UniversalBot(connector);
             let step = 0;
 
-            bot.dialog('/', (session) => {
-                session.beginDialog('/handleComputerVisionResponse', ComputerVision.emptyResponse);
+            bot.dialog("/", (session) => {
+                session.beginDialog("/handleComputerVisionResponse", ComputerVision.emptyResponse);
             });
             // This is not a real dialog, but it's convenient to test it this way
-            bot.dialog('/handleComputerVisionResponse', handleComputerVisionResponse);       
-            bot.on('send', message => {
+            bot.dialog("/handleComputerVisionResponse", handleComputerVisionResponse);
+            bot.on("send", (message) => {
                 switch (++step) {
                     case 1:
                         expect(message.text).to.equal("Sorry, I couldn't recognize anybody.");
@@ -205,80 +205,86 @@ describe('handlers module', function () {
                 }
             });
 
-            connector.processMessage('start');
+            connector.processMessage("start");
         });
 
-        it('should handle a response with a single result', function (done) {
+        it("should handle a response with a single result", (done) => {
             const connector = new ConsoleConnector();
             const bot = new UniversalBot(connector);
-            let step = 0;
+            const step = 0;
 
-            bot.dialog('/', (session) => {
-                session.beginDialog('/handleComputerVisionResponse', ComputerVision.successResponseSingle);
+            bot.dialog("/", (session) => {
+                session.beginDialog("/handleComputerVisionResponse", ComputerVision.successResponseSingle);
             });
             // This is not a real dialog, but it's convenient to test it this way
-            bot.dialog('/handleComputerVisionResponse', handleComputerVisionResponse);       
-            bot.on('send', message => {
+            bot.dialog("/handleComputerVisionResponse", handleComputerVisionResponse);
+            bot.on("send", (message) => {
                 expect(message.text).to.equal("I've recognized Jennifer Lawrence with 94% certainty");
                 done();
             });
 
-            connector.processMessage('start');
+            connector.processMessage("start");
         });
 
-        it('should handle a response with multiple results', function (done) {
+        it("should handle a response with multiple results", (done) => {
             const connector = new ConsoleConnector();
             const bot = new UniversalBot(connector);
             let step = 0;
+            let msg = "";
 
-            bot.dialog('/', (session) => {
-                session.beginDialog('/handleComputerVisionResponse', ComputerVision.successResponseMultiple);
+            bot.dialog("/", (session) => {
+                session.beginDialog("/handleComputerVisionResponse", ComputerVision.successResponseMultiple);
             });
             // This is not a real dialog, but it's convenient to test it this way
-            bot.dialog('/handleComputerVisionResponse', handleComputerVisionResponse);       
-            bot.on('send', message => {
+            bot.dialog("/handleComputerVisionResponse", handleComputerVisionResponse);
+            bot.on("send", (message) => {
                 switch (++step) {
                     case 1:
-                        expect(message.text).to.equal("I detected a number of celebrities, the results are from left to right.");
+                        msg = "I detected a number of celebrities, the results are from left to right.";
+                        expect(message.text).to.equal(msg);
                         break;
                     case 2:
-                        expect(message.text).to.equal("I've recognized Jennifer Lawrence with 94% certainty");                        
+                        msg = "I've recognized Jennifer Lawrence with 94% certainty";
+                        expect(message.text).to.equal(msg);
                         break;
                     case 3:
-                        expect(message.text).to.equal("I've recognized Ellen Degeneres with 99% certainty");
+                        msg = "I've recognized Ellen Degeneres with 99% certainty";
+                        expect(message.text).to.equal(msg);
                         break;
                     case 4:
-                        expect(message.text).to.equal("I've recognized Julia Fiona Roberts with 98% certainty");
+                        msg = "I've recognized Julia Fiona Roberts with 98% certainty";
+                        expect(message.text).to.equal(msg);
                         break;
-                    case 5:                        
-                        expect(message.text).to.equal("I've recognized Bradley Cooper with 99% certainty");
+                    case 5:
+                        msg = "I've recognized Bradley Cooper with 99% certainty";
+                        expect(message.text).to.equal(msg);
                         done();
                         break;
                 }
             });
 
-            connector.processMessage('start');
+            connector.processMessage("start");
         });
     });
 
-    describe('handleEmotionResponse', function () {
+    describe("handleEmotionResponse", () => {
         const { handleEmotionResponse } = handlers;
 
-        it('should throw if invoked with an invalid argument', function () {
-            expect(handleEmotionResponse).to.throw('Response body cannot be undefined');
+        it("should throw if invoked with an invalid argument", () => {
+            expect(handleEmotionResponse).to.throw("Response body cannot be undefined");
         });
 
-        it('should handle an empty response', function (done) {
+        it("should handle an empty response", (done) => {
             const connector = new ConsoleConnector();
             const bot = new UniversalBot(connector);
             let step = 0;
 
-            bot.dialog('/', (session) => {
-                session.beginDialog('/handleEmotionResponse', Emotion.emptyResponse);
+            bot.dialog("/", (session) => {
+                session.beginDialog("/handleEmotionResponse", Emotion.emptyResponse);
             });
             // This is not a real dialog, but it's convenient to test it this way
-            bot.dialog('/handleEmotionResponse', handleEmotionResponse);
-            bot.on('send', message => {
+            bot.dialog("/handleEmotionResponse", handleEmotionResponse);
+            bot.on("send", (message) => {
                 switch (++step) {
                     case 1:
                         expect(message.text).to.equal("Sorry, I couldn't detect any faces.");
@@ -290,53 +296,57 @@ describe('handlers module', function () {
                 }
             });
 
-            connector.processMessage('start');
+            connector.processMessage("start");
         });
 
-        it('should handle a response with a single result', function (done) {
+        it("should handle a response with a single result", (done) => {
             const connector = new ConsoleConnector();
             const bot = new UniversalBot(connector);
-            let step = 0;
+            const step = 0;
 
-            bot.dialog('/', (session) => {
-                session.beginDialog('/handleEmotionResponse', Emotion.successResponseSingle);
+            bot.dialog("/", (session) => {
+                session.beginDialog("/handleEmotionResponse", Emotion.successResponseSingle);
             });
             // This is not a real dialog, but it's convenient to test it this way
-            bot.dialog('/handleEmotionResponse', handleEmotionResponse);       
-            bot.on('send', message => {
+            bot.dialog("/handleEmotionResponse", handleEmotionResponse);
+            bot.on("send", (message) => {
                 expect(message.text).to.equal("I've recognized happiness with 99% certainty");
                 done();
             });
 
-            connector.processMessage('start');
+            connector.processMessage("start");
         });
 
-        it('should handle a response with multiple results', function (done) {
+        it("should handle a response with multiple results", (done) => {
             const connector = new ConsoleConnector();
             const bot = new UniversalBot(connector);
             let step = 0;
+            let msg = "";
 
-            bot.dialog('/', (session) => {
-                session.beginDialog('/handleEmotionResponse', Emotion.successResponseMultiple);
+            bot.dialog("/", (session) => {
+                session.beginDialog("/handleEmotionResponse", Emotion.successResponseMultiple);
             });
             // This is not a real dialog, but it's convenient to test it this way
-            bot.dialog('/handleEmotionResponse', handleEmotionResponse);       
-            bot.on('send', message => {
+            bot.dialog("/handleEmotionResponse", handleEmotionResponse);
+            bot.on("send", (message) => {
                 switch (++step) {
                     case 1:
-                        expect(message.text).to.equal("I detected a number of faces, the results are from left to right.");
+                        msg = "I detected a number of faces, the results are from left to right.";
+                        expect(message.text).to.equal(msg);
                         break;
                     case 2:
-                        expect(message.text).to.equal("I've recognized happiness with 100% certainty");
-                        break;                    
-                    case 3:                        
-                        expect(message.text).to.equal("I've recognized happiness with 99% certainty");
+                        msg = "I've recognized happiness with 100% certainty";
+                        expect(message.text).to.equal(msg);
+                        break;
+                    case 3:
+                        msg = "I've recognized happiness with 99% certainty";
+                        expect(message.text).to.equal(msg);
                         done();
                         break;
                 }
             });
 
-            connector.processMessage('start');
+            connector.processMessage("start");
         });
     });
 });
