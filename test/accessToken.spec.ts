@@ -1,48 +1,48 @@
-import * as needle from 'needle';
-import * as sinon from 'sinon';
-import { expect } from 'chai';
-import { ChatConnector, UniversalBot, IConnector } from 'botbuilder';
-const token = require('../lib/helpers/accessToken');
+import { ChatConnector, IConnector, UniversalBot } from "botbuilder";
+import { expect } from "chai";
+import * as needle from "needle";
+import * as sinon from "sinon";
+const token = require("../lib/helpers/accessToken");
 
-describe('accessToken module', function () {
-    describe('getAccessToken', function () {
-        it('should return null if the accessToken has not yet been set', function () {
+describe("accessToken module", () => {
+    describe("getAccessToken", () => {
+        it("should return null if the accessToken has not yet been set", () => {
             expect(token.getAccessToken()).to.be.null;
         });
 
-        it('should return the accessToken after it has been set', function () {
+        it("should return the accessToken after it has been set", () => {
             const connector = new ChatConnector({
-                appId: 'appId',
-                appPassword: 'appPassword'
+                appId: "appId",
+                appPassword: "appPassword",
             });
-            (<any>connector).getAccessToken = (callback) => {
-                callback(null, 'some_acces_token');
+            (connector as any).getAccessToken = (callback) => {
+                callback(null, "some_acces_token");
             };
             const bot = new UniversalBot(connector);
 
             token.setAccessToken(bot);
-            expect(token.getAccessToken()).to.equal('some_acces_token');
+            expect(token.getAccessToken()).to.equal("some_acces_token");
         });
     });
 
-    describe('setAccessToken', function () {
-        it('should throw an exception if bot is not an instance of UniversalBot', function () {
-            expect(token.setAccessToken).to.throw('Invalid argument: bot must be instance of UniversalBot');
+    describe("setAccessToken", () => {
+        it("should throw an exception if bot is not an instance of UniversalBot", () => {
+            expect(token.setAccessToken).to.throw("Invalid argument: bot must be instance of UniversalBot");
         });
 
-        it('should throw an exception if the accessToken could not be retrieved', function () {
+        it("should throw an exception if the accessToken could not be retrieved", () => {
             const connector = new ChatConnector({
-                appId: 'appId',
-                appPassword: 'appPassword'
+                appId: "appId",
+                appPassword: "appPassword",
             });
-            (<any>connector).getAccessToken = (callback) => {
-                callback(new Error('Something failed'));
+            (connector as any).getAccessToken = (callback) => {
+                callback(new Error("Something failed"));
             };
             const bot = new UniversalBot(connector);
             try {
                 token.setAccessToken(bot);
             } catch (e) {
-                expect(e.message).to.equal('Something failed');
+                expect(e.message).to.equal("Something failed");
             }
         });
     });
