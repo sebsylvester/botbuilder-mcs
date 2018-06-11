@@ -1,7 +1,7 @@
 # botbuilder-mcs
 
 [![Build Status](https://travis-ci.org/sebsylvester/botbuilder-mcs.svg?branch=master)](https://travis-ci.org/sebsylvester/botbuilder-mcs)
-[![codecov](https://codecov.io/gh/sebsylvester/botbuilder-mcs/branch/master/graph/badge.svg)](https://codecov.io/gh/sebsylvester/botbuilder-mcs)
+[![codecov](https://codecov.io/gh/sebsylvester/botbuilder-mcs/branch/master/graph/badge.svg)](https://codecov.io/gh/sebsylvester/botbuilder-mcs) [![Greenkeeper badge](https://badges.greenkeeper.io/sebsylvester/botbuilder-mcs.svg)](https://greenkeeper.io/)
 
 This is a demo bot, built with the Bot Builder SDK, that demonstrates a few of Microsoft's Cognitive Services APIs.
 The bot currently uses two APIs. The Computer Vision API with a domain-specific model to recognize celebrities, 
